@@ -1,3 +1,4 @@
 venv/
 __pycache__/
 *.pyc
+# all files ignored by github and not added to the repository

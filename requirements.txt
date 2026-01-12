@@ -1,0 +1,5 @@
+pvporcupine
+pyaudio
+SpeechRecognition
+pyttsx3
+#all the modules a system requires to run this program
