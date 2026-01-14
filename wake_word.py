@@ -7,8 +7,8 @@ def listen_wake_word():
     try:
         porcupine = pvporcupine.create(access_key=access_key, keywords=["jarvis"])
         
-        # We use index 2 (Fifine Mic) from your scan
-        recorder = PvRecorder(device_index=0, frame_length=porcupine.frame_length)
+     
+        recorder = PvRecorder(device_index=2, frame_length=porcupine.frame_length)
         recorder.start()
 
         print("Jarvis is listening... (Say 'Jarvis')")
