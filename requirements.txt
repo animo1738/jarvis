@@ -2,4 +2,8 @@ pvporcupine
 pyaudio
 SpeechRecognition
 pyttsx3
+openai
+python-dotenv
+requests
+numpy
 #all the modules a system requires to run this program
