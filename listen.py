@@ -1,58 +1,23 @@
 import speech_recognition as sr
-import pvrecorder
-from pvrecorder import PvRecorder
-import requests
-import os
-import tempfile
+import sys
 
-HF_TOKEN = os.getenv("HF_TOKEN")
-WHISPER_URL = "https://api-inference.huggingface.co/models/openai/whisper-small"
-
-HEADERS = {
-    "Authorization": f"Bearer {HF_TOKEN}"
-}
-
-
-
-import speech_recognition as sr
-
-def find_mic_index():
-    devices = PvRecorder.get_available_devices()
-    for i, device in enumerate(devices):
-        name = device.lower()
-        if ("usb" in name or "fifine" in name) and "monitor" not in name:
-            print(f"Found Microphone at Index {i}: {device}")
-            return i
-    for i, device in enumerate(devices):
-        if "monitor" not in device.lower():
-            return i
-    return None
-
-def listen(mic_index=2):
+def listen_command(mic_idx):
     r = sr.Recognizer()
     
-    audio = None 
-    mic_idx = find_mic_index()
-    if mic_idx is None:
-        print("Warning: Auto-search failed. Falling back to Index 3.")
-        mic_idx = 3
-        
+    # We use 'with' to auto-close the mic immediately after use
     try:
-       
-        with sr.Microphone(device_index=mic_idx, sample_rate=16000) as source:
-            r.adjust_for_ambient_noise(source, duration=0.3)
-            print(f"Listening on Index {mic_idx}...")
+        with sr.Microphone(device_index=mic_idx) as source:
+            # Faster calibration to keep the response snappy
+            r.adjust_for_ambient_noise(source, duration=0.5) 
+            print("Jarvis: Listening for command...")
             
-            # This is where it used to crash. 
-            audio = r.listen(source, timeout=5, phrase_time_limit=10)
+            audio = r.listen(source, timeout=5, phrase_time_limit=8)
             
-        if audio:
-            print("Done listening, recognizing...")
+            print("Jarvis: Recognizing...")
             return r.recognize_google(audio)
             
+    except sr.UnknownValueError:
+        return None # Could not understand audio
     except Exception as e:
-        
-        print(f"Hardware Error: {e}")
+        sys.__stderr__.write(f"Command Listen Error: {e}\n")
         return None
-
-    return None
