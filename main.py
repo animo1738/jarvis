@@ -21,32 +21,31 @@ MIC_INDEX = 2
 while True:
     print("Waiting for wake word...")
     if listen_wake_word(mic_index=MIC_INDEX):
+        
+        time.sleep(0.5) 
+        print("Wake word detected")
+        speak("Yes?")
     
-    # ADD THIS: Give the hardware 0.5 seconds to breathe
-    time.sleep(0.5) 
-    
-    print("Wake word detected")
-    speak("Yes?")
+        start = time.time()
 
-    start = time.time()
 
-    while time.time() - start < ACTIVE_TIMEOUT:
+        while time.time() - start < ACTIVE_TIMEOUT:
 
-        # Check for reminders
-        alerts = upcoming_within_hour()
-        now_time = datetime.now().strftime("%H:%M")
-        for e in alerts:
-            if e["time"] == now_time:
-                speak(f"Reminder: {e['text']}")
+            # Check for reminders
+            alerts = upcoming_within_hour()
+            now_time = datetime.now().strftime("%H:%M")
+            for e in alerts:
+                if e["time"] == now_time:
+                    speak(f"Reminder: {e['text']}")
 
-        # Listen to command
-        command = listen(mic_index=MIC_INDEX)
-        if command:
-            state = handle_command(command)
-            if state == "sleep":
-                break
-            start = time.time()
+            # Listen to command
+            command = listen(mic_index=MIC_INDEX)
+            if command:
+                state = handle_command(command)
+                if state == "sleep":
+                    break
+                start = time.time()
 
-        time.sleep(1)
+            time.sleep(0.1)
 
-    speak("Sleeping")
+        speak("Sleeping")
