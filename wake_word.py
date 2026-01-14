@@ -18,7 +18,7 @@ def listen_wake_word():
             result = porcupine.process(pcm)
             if result >= 0:
                 print("Wake word detected!")
-                recorder.stop()
+                
                 break
                 
     except Exception as e:
