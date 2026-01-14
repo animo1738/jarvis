@@ -1,4 +1,5 @@
 import speech_recognition as sr
+import pvrecorder as PvRecorder
 import requests
 import os
 import tempfile
