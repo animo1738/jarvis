@@ -5,7 +5,7 @@ def listen_wake_word():
     access_key = "9ta+47WGMP6Wb0szstPJ2D/0cZ8L5ev2wUjrcV3aBn+hzK33pZ6WYw=="
     
     try:
-        porcupine = pvporcupine.create(access_key=access_key, keywords=["Jarvis"])
+        porcupine = pvporcupine.create(access_key=access_key, keywords=["jarvis"])
         
         # We use index 2 (Fifine Mic) from your scan
         recorder = PvRecorder(device_index=2, frame_length=porcupine.frame_length)
