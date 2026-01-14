@@ -18,8 +18,6 @@ def listen_wake_word(mic_index=2): # Set your default index here
     porcupine = None
     recorder = None
     mic_idx = find_mic_index()
-    
-    # 2. Safety Check: If it's STILL None, force it to 0 or 3
     if mic_idx is None:
         print("Warning: Auto-search failed. Falling back to Index 3.")
         mic_idx = 3
