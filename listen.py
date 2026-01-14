@@ -14,6 +14,18 @@ recognizer = sr.Recognizer()
 
 import speech_recognition as sr
 
+def find_mic_index():
+    devices = PvRecorder.get_available_devices()
+    for i, device in enumerate(devices):
+        name = device.lower()
+        if ("usb" in name or "fifine" in name) and "monitor" not in name:
+            print(f"Found Microphone at Index {i}: {device}")
+            return i
+    for i, device in enumerate(devices):
+        if "monitor" not in device.lower():
+            return i
+    return None
+
 def listen(mic_index=2):
     r = sr.Recognizer()
     
