@@ -1,32 +1,31 @@
 import pvporcupine
 from pvrecorder import PvRecorder
 
-def listen_wake_word():
+def listen_wake_word(mic_index=2): # Set your default index here
     access_key = "9ta+47WGMP6Wb0szstPJ2D/0cZ8L5ev2wUjrcV3aBn+hzK33pZ6WYw=="
-    
+    porcupine = None
+    recorder = None
+
     try:
+        # Initialize Porcupine
         porcupine = pvporcupine.create(access_key=access_key, keywords=["jarvis"])
         
-     
-        recorder = PvRecorder(device_index=2, frame_length=porcupine.frame_length)
+        # Initialize Recorder with the specific mic index
+        recorder = PvRecorder(device_index=mic_index, frame_length=porcupine.frame_length)
         recorder.start()
-
-        print("Jarvis is listening... (Say 'Jarvis')")
 
         while True:
             pcm = recorder.read()
-            result = porcupine.process(pcm)
-            if result >= 0:
-                print("Wake word detected!")
-                
-                break
-                
+            if porcupine.process(pcm) >= 0:
+                return True # Wake word detected!
+
     except Exception as e:
-        print(f"Error: {e}")
+        print(f"Wake Word Error: {e}")
+        return False
     finally:
-        # Proper cleanup is much easier here
-        if 'recorder' in locals():
+        # CLEANUP: This is the most important part to prevent Segfaults
+        if recorder:
             recorder.stop()
             recorder.delete()
-        if 'porcupine' in locals():
+        if porcupine:
             porcupine.delete()
