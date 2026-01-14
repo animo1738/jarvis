@@ -33,7 +33,7 @@ if events:
 MIC_INDEX = find_mic_index()
 while True:
     print("Waiting for wake word...")
-    if listen_wake_word(mic_index=MIC_INDEX):
+    if listen_wake_word():
         
         time.sleep(0.5) 
         print("Wake word detected")
