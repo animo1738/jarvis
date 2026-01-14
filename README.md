@@ -1,9 +1,13 @@
-# Jarvis – Raspberry Pi Personal Assistant
-
-Jarvis is a lightweight voice‑activated personal assistant designed to run on a Raspberry Pi 4.  
-It listens for a wake word, processes speech, interacts with an LLM, manages reminders, stores memory, and delivers a daily morning briefing.
 
 ---
+<p align="center">
+  <h1 align="center">Jarvis – Raspberry Pi Personal Assistant </h1>
+</p>
+
+<p align="center">
+  <b>Jarvis is a lightweight voice‑activated personal assistant designed to run on a Raspberry Pi 4.  
+It listens for a wake word, processes speech, interacts with an LLM, manages reminders, stores memory, and delivers a daily morning briefing..</b>
+</p>
 
 ## Features
 
@@ -31,6 +35,14 @@ It listens for a wake word, processes speech, interacts with an LLM, manages rem
 - Python 3.9+  
 - Linux (Raspberry Pi OS recommended)
 
+---
+## What's Next
+
+- API and internet connection features (IMDB, weather, prayer times, Spotify, email reading, local news)
+- Connection to home assistant and peripherals like LEDs and motion detectors for smart home integration
+- Integration with Telegram to send messages
+- Local LLM upgrade (Jetson Nano or RPi5
+  
 ---
 
 ## Installation
