@@ -1,4 +1,5 @@
 import time
+import PvRecorder
 from wake_word import listen_wake_word
 from listen import listen
 from speech import speak
