@@ -14,6 +14,7 @@ recognizer = sr.Recognizer()
 
 def listen(mic_index=2):
     r = sr.Recognizer()
+    audio = None
     
     try:
         # Use the same index and force 16kHz (Standard for Voice AI)
