@@ -12,10 +12,11 @@ def listen_wake_word():
     access_key = "9ta+47WGMP6Wb0szstPJ2D/0cZ8L5ev2wUjrcV3aBn+hzK33pZ6WYw=="
     #keywords to listen for 
     pa = pyaudio.PyAudio()
+    mic_index = 2
     try:
         porcupine = pvporcupine.create(
             access_key=access_key, 
-            keywords=["jarvis", "hey jarvis", "wake up" ]
+            keywords=["jarvis"]
         )
     except Exception as e:
         print(f"Error initializing Porcupine: {e}")
@@ -25,6 +26,7 @@ def listen_wake_word():
         channels=1,
         format=pyaudio.paInt16,
         input=True,
+        input_device_index = mic_index,
         frames_per_buffer=porcupine.frame_length
         #input stream details for processing
     )
