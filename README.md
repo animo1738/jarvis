@@ -65,6 +65,7 @@ cd jarvis
 ### 4. Install Python dependencies
 ```bash
 pip3 install -r requirements.txt
+sudo apt install espeak-ng libespeak1
 ```
 
 ### 5. Running Jarvis
