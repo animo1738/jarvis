@@ -14,36 +14,34 @@ def find_mic_index():
             return i
     return None
 
-def listen_wake_word(mic_index=2):
+def listen_wake_word():
     access_key = "9ta+47WGMP6Wb0szstPJ2D/0cZ8L5ev2wUjrcV3aBn+hzK33pZ6WYw=="
     porcupine = None
     recorder = None
     mic_idx = find_mic_index()
-    
-    if mic_idx is None:
-        print("Warning: Auto-search failed. Falling back to Index 3.")
-        mic_idx = 3
-        
+
     try:
-        # Initialize Porcupine
         porcupine = pvporcupine.create(access_key=access_key, keywords=["jarvis"])
         
-        # Initialize Recorder with the specific mic index
+        # We wrap the recorder startup in its own check
         recorder = PvRecorder(device_index=mic_idx, frame_length=porcupine.frame_length)
+        
+        print(f"Attempting to start recording at {porcupine.sample_rate}Hz...")
         recorder.start()
+        print("Listening for 'Jarvis'...")
 
         while True:
             pcm = recorder.read()
             if porcupine.process(pcm) >= 0:
-                return True 
+                return True
 
     except Exception as e:
         print(f"Wake Word Error: {e}")
         return False
     finally:
-        # CLEANUP: Crucial to prevent 'Device Busy' or Segfaults
-        if recorder:
+        # Fixed: Check if they exist BEFORE trying to delete them
+        if recorder is not None:
             recorder.stop()
             recorder.delete()
-        if porcupine:
+        if porcupine is not None:
             porcupine.delete()
