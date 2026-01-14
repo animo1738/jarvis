@@ -7,7 +7,18 @@ def load():
     with open(FILE, "r") as f:
         return json.load(f)["events"]
     #opens the events file and its components
+def today_events():
+    now = datetime.datetime.now()
+    day_name = now.strftime("%A").lower()  #
+    
+    events_today = [] 
+    
+    for e in load():
+        if e["day"] == day_name:
+            events_today.append(e)  
 
+    return events_today  
+    
 def save(events):
     with open(FILE, "w") as f:
         json.dump({"events": events}, f, indent=2)
