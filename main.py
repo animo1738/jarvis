@@ -1,64 +1,43 @@
-import time
-from pvrecorder import PvRecorder
+import os, sys, time
+
+# SILENCE ALSA ERRORS: This MUST be the first thing in your file
+stderr = sys.stderr
+sys.stderr = open(os.devnull, 'w')
+
 from wake_word import listen_wake_word
-from listen import listen
+from listen import listen_command
 from speech import speak
 from commands import handle_command
-from reminders import today_events, upcoming_within_hour
-from datetime import datetime
+from pvrecorder import PvRecorder
 
-ACTIVE_TIMEOUT = 20
-
-print("Jarvis started")
-
-def find_mic_index():
+def find_mic():
+    """Finds the Fifine mic once at startup."""
     devices = PvRecorder.get_available_devices()
-    for i, device in enumerate(devices):
-        name = device.lower()
-        if ("usb" in name or "fifine" in name) and "monitor" not in name:
-            print(f"Found Microphone at Index {i}: {device}")
+    for i, name in enumerate(devices):
+        if "usb" in name.lower() or "fifine" in name.lower():
             return i
-    for i, device in enumerate(devices):
-        if "monitor" not in device.lower():
-            return i
-    return None
-# Daily agenda announcement
-events = today_events()
-if events:
-    speak("Good morning. Today's agenda:")
-    for e in events:
-        speak(f"{e['time']} {e['text']}")
+    return 1 # Fallback to Index 1
 
+if __name__ == "__main__":
+    MIC_INDEX = find_mic()
+    print(f"--- Jarvis Started (Mic Index: {MIC_INDEX}) ---")
 
-MIC_INDEX = find_mic_index()
-while True:
-    print("Waiting for wake word...")
-    if listen_wake_word():
+    while True:
+        print("Status: Waiting for 'Jarvis'...")
         
-        time.sleep(0.5) 
-        print("Wake word detected")
-        speak("Yes?")
-    
-        start = time.time()
-
-
-        while time.time() - start < ACTIVE_TIMEOUT:
-
-            # Check for reminders
-            alerts = upcoming_within_hour()
-            now_time = datetime.now().strftime("%H:%M")
-            for e in alerts:
-                if e["time"] == now_time:
-                    speak(f"Reminder: {e['text']}")
-
-            # Listen to command
-            command = listen(mic_index=MIC_INDEX)
+        # 1. Start Wake Word Detection
+        if listen_wake_word(MIC_INDEX):
+            print("Event: Wake word detected!")
+            speak("Yes?")
+            
+            # 2. Briefly wait for speaker to finish before opening mic for command
+            time.sleep(0.3)
+            
+            # 3. Start Command Recognition
+            command = listen_command(MIC_INDEX)
+            
             if command:
-                state = handle_command(command)
-                if state == "sleep":
-                    break
-                start = time.time()
-
-            time.sleep(0.1)
-
-        speak("Sleeping")
+                print(f"You said: {command}")
+                handle_command(command)
+            else:
+                print("Status: No command heard.")
