@@ -10,14 +10,22 @@ ACTIVE_TIMEOUT = 20
 
 print("Jarvis started")
 
-
+def find_mic_index():
+    devices = PvRecorder.get_available_devices()
+    for i, device in enumerate(devices):
+        if "fifine" in device.lower() or "usb" in device.lower():
+            print(f"Found Microphone at Index {i}: {device}")
+            return i
+    return None
 # Daily agenda announcement
 events = today_events()
 if events:
     speak("Good morning. Today's agenda:")
     for e in events:
         speak(f"{e['time']} {e['text']}")
-MIC_INDEX = 0
+
+
+MIC_INDEX = find_mic_index()
 while True:
     print("Waiting for wake word...")
     if listen_wake_word(mic_index=MIC_INDEX):
