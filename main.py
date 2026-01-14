@@ -21,6 +21,10 @@ if events:
 while True:
     print("Waiting for wake word...")
     listen_wake_word()
+    
+    # ADD THIS: Give the hardware 0.5 seconds to breathe
+    time.sleep(0.5) 
+    
     print("Wake word detected")
     speak("Yes?")
 
