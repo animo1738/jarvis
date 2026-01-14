@@ -18,12 +18,13 @@ It listens for a wake word, processes speech, interacts with an LLM, manages rem
 - **Persistent memory** (`memory.json`, `memory.py`)
 - **Morning briefing generator** (`morning.py`)
 - **Continuous listening loop** (`listen.py`, `main.py`)
+- **Whisper API through HuggingFace** 
 
 ---
 
 ## Hardware Requirements
 
-- Raspberry Pi 4 (2GB+ recommended)
+- Raspberry Pi 4 (4GB+ recommended)
 - USB microphone or ReSpeaker hat
 - Speakers or 3.5mm audio output
 - Stable internet connection (for LLM API calls)
