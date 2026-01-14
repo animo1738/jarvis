@@ -39,9 +39,12 @@ def listen_wake_word():
         print(f"Wake Word Error: {e}")
         return False
     finally:
-        # Fixed: Check if they exist BEFORE trying to delete them
+        # Check if they exist BEFORE calling methods on them
         if recorder is not None:
-            recorder.stop()
-            recorder.delete()
+            try:
+                recorder.stop()
+                recorder.delete()
+            except:
+                pass
         if porcupine is not None:
             porcupine.delete()
