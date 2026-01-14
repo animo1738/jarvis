@@ -6,7 +6,7 @@
 
 <p align="center">
   <b>Jarvis is a lightweight voice‑activated personal assistant designed to run on a Raspberry Pi 4.  
-It listens for a wake word, processes speech, interacts with an LLM, manages reminders, stores memory, and delivers a daily morning briefing..</b>
+It listens for a wake word, processes speech, interacts with an LLM, manages reminders, stores memory, and delivers a daily morning briefing.</b>
 </p>
 
 ## Features
