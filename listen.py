@@ -12,7 +12,7 @@ HEADERS = {
     "Authorization": f"Bearer {HF_TOKEN}"
 }
 
-recognizer = sr.Recognizer()
+
 
 import speech_recognition as sr
 
