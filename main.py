@@ -17,10 +17,10 @@ if events:
     speak("Good morning. Today's agenda:")
     for e in events:
         speak(f"{e['time']} {e['text']}")
-
+MIC_INDEX = 2 
 while True:
     print("Waiting for wake word...")
-    listen_wake_word()
+    if listen_wake_word(mic_index=MIC_INDEX)
     
     # ADD THIS: Give the hardware 0.5 seconds to breathe
     time.sleep(0.5) 
@@ -40,7 +40,7 @@ while True:
                 speak(f"Reminder: {e['text']}")
 
         # Listen to command
-        command = listen()
+        command = listen(mic_index=MIC_INDEX)
         if command:
             state = handle_command(command)
             if state == "sleep":
