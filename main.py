@@ -1,43 +1,27 @@
-import os, sys, time
-
-# SILENCE ALSA ERRORS: This MUST be the first thing in your file
-stderr = sys.stderr
-sys.stderr = open(os.devnull, 'w')
-
+import time
 from wake_word import listen_wake_word
-from listen import listen_command
+from listen import listen
 from speech import speak
 from commands import handle_command
-from pvrecorder import PvRecorder
 
-def find_mic():
-    """Finds the Fifine mic once at startup."""
-    devices = PvRecorder.get_available_devices()
-    for i, name in enumerate(devices):
-        if "usb" in name.lower() or "fifine" in name.lower():
-            return i
-    return 1 # Fallback to Index 1
+print("Jarvis started")
 
-if __name__ == "__main__":
-    MIC_INDEX = find_mic()
-    print(f"--- Jarvis Started (Mic Index: {MIC_INDEX}) ---")
+# (Your find_mic_index logic was here too)
 
-    while True:
-        print("Status: Waiting for 'Jarvis'...")
-        
-        # 1. Start Wake Word Detection
-        if listen_wake_word(MIC_INDEX):
-            print("Event: Wake word detected!")
-            speak("Yes?")
-            
-            # 2. Briefly wait for speaker to finish before opening mic for command
-            time.sleep(0.3)
-            
-            # 3. Start Command Recognition
-            command = listen_command(MIC_INDEX)
-            
+while True:
+    print("Waiting for wake word...")
+    if listen_wake_word():
+        time.sleep(0.5) 
+        print("Wake word detected")
+        speak("Yes?")
+    
+        start = time.time()
+        while time.time() - start < 20: # ACTIVE_TIMEOUT
+            command = listen()
             if command:
-                print(f"You said: {command}")
-                handle_command(command)
-            else:
-                print("Status: No command heard.")
+                state = handle_command(command)
+                if state == "sleep":
+                    break
+                start = time.time()
+            time.sleep(0.1)
+        speak("Sleeping")
