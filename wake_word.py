@@ -7,7 +7,7 @@ import struct
 
 #enables the jarvis to be constantly listening for wakeword
 def listen_wake_word():
-    porcupine = pvporcupine.create(keywords=["jarvis","hey jarvis","agenda for today"])
+    porcupine = pvporcupine.create(keywords=["jarvis"])
     #keywords to listen for 
     pa = pyaudio.PyAudio()
 
