@@ -12,25 +12,29 @@ HEADERS = {
 
 recognizer = sr.Recognizer()
 
+import speech_recognition as sr
+
 def listen(mic_index=2):
     r = sr.Recognizer()
-    audio = None
+    
+    audio = None 
     
     try:
-        # Use the same index and force 16kHz (Standard for Voice AI)
+       
         with sr.Microphone(device_index=mic_index, sample_rate=16000) as source:
-            # Shorten duration for faster response in your video
-            r.adjust_for_ambient_noise(source, duration=0.5)
-            print("Listening for command...")
+            r.adjust_for_ambient_noise(source, duration=0.3)
+            print(f"Listening on Index {mic_index}...")
             
-            # Timeout prevents the script from hanging forever
+            # This is where it used to crash. 
             audio = r.listen(source, timeout=5, phrase_time_limit=10)
             
-        print("Processing...")
-        return r.recognize_google(audio)
-        
-    except sr.WaitTimeoutError:
-        return None
+        if audio:
+            print("Done listening, recognizing...")
+            return r.recognize_google(audio)
+            
     except Exception as e:
-        print(f"STT Error: {e}")
+        
+        print(f"Hardware Error: {e}")
         return None
+
+    return None
