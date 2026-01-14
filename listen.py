@@ -30,12 +30,16 @@ def listen(mic_index=2):
     r = sr.Recognizer()
     
     audio = None 
-    
+    mic_idx = find_mic_index()
+    if mic_idx is None:
+        print("Warning: Auto-search failed. Falling back to Index 3.")
+        mic_idx = 3
+        
     try:
        
-        with sr.Microphone(device_index=mic_index, sample_rate=16000) as source:
+        with sr.Microphone(device_index=mic_idx, sample_rate=16000) as source:
             r.adjust_for_ambient_noise(source, duration=0.3)
-            print(f"Listening on Index {mic_index}...")
+            print(f"Listening on Index {mic_idx}...")
             
             # This is where it used to crash. 
             audio = r.listen(source, timeout=5, phrase_time_limit=10)
