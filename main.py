@@ -14,7 +14,7 @@ print("Jarvis started")
 def find_mic_index():
     devices = PvRecorder.get_available_devices()
     for i, device in enumerate(devices):
-        if "fifine" in device.lower() & "usb" in device.lower():
+        if "fifine" in device.lower() and "usb" in device.lower():
             print(f"Found Microphone at Index {i}: {device}")
             return i
     return None
