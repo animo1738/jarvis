@@ -1,26 +1,50 @@
-import os, sys, time
-# Silence ALSA noise
-sys.stderr = open(os.devnull, 'w')
-
+import os
+import sys
+import time
 from wake_word import listen_wake_word
-from listen import listen_command
+from listen import listen_command 
 from speech import speak
 from commands import handle_command
+from pvrecorder import PvRecorder
 
-if __name__ == "__main__":
-    print("--- Jarvis is Active (Using PulseAudio) ---")
+# Silence the ALSA/JACK warnings that flood the terminal
+sys.stderr = open(os.devnull, 'w')
+
+def get_mic_index():
+    devices = PvRecorder.get_available_devices()
+    for i, name in enumerate(devices):
+        if "usb" in name.lower() or "fifine" in name.lower():
+            return i
+    return 1 # Default fallback
+
+def main():
+    mic_idx = get_mic_index()
+    print(f"--- Jarvis System Initialized (Mic Index: {mic_idx}) ---")
     
     while True:
-        print("Waiting for 'Jarvis'...")
-        # Use index -1 to tell PulseAudio to use the System Default Mic
-        if listen_wake_word(device_index=-1):
-            print("Wake word detected!")
+        print("\n[Status] Waiting for 'Jarvis'...")
+        
+        # Step 1: Listen for Wake Word
+        if listen_wake_word(mic_idx):
+            print("[Event] Wake word detected.")
             speak("Yes?")
             
-            # Give the audio server a moment to switch
-            time.sleep(0.2)
+            # Step 2: Listen for Command
+            # We pass the mic index so it doesn't have to search again
+            command = listen_command(mic_idx)
             
-            command = listen_command()
             if command:
-                print(f"User: {command}")
+                print(f"[User] {command}")
+                # handle_command should return "sleep" to break the active loop
                 handle_command(command)
+            else:
+                print("[Status] No command detected, returning to standby.")
+        
+        time.sleep(0.1)
+
+if __name__ == "__main__":
+    try:
+        main()
+    except KeyboardInterrupt:
+        print("\n[System] Shutting down Jarvis...")
+        sys.exit(0)
