@@ -20,7 +20,7 @@ if events:
 MIC_INDEX = 2 
 while True:
     print("Waiting for wake word...")
-    if listen_wake_word(mic_index=MIC_INDEX)
+    if listen_wake_word(mic_index=MIC_INDEX):
     
     # ADD THIS: Give the hardware 0.5 seconds to breathe
     time.sleep(0.5) 
