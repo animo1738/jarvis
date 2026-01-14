@@ -17,7 +17,7 @@ if events:
     speak("Good morning. Today's agenda:")
     for e in events:
         speak(f"{e['time']} {e['text']}")
-MIC_INDEX = 2 
+MIC_INDEX = 1 
 while True:
     print("Waiting for wake word...")
     if listen_wake_word(mic_index=MIC_INDEX):
