@@ -1,23 +1,29 @@
 import speech_recognition as sr
-import sys
+import os
 
-def listen_command(mic_idx):
+recognizer = sr.Recognizer()
+
+def find_mic_index():
+    # (Same find_mic_index function as above)
+    pass
+
+def listen(mic_index=2):
     r = sr.Recognizer()
-    
-    # We use 'with' to auto-close the mic immediately after use
+    mic_idx = find_mic_index()
+    if mic_idx is None:
+        mic_idx = 3
+        
     try:
-        with sr.Microphone(device_index=mic_idx) as source:
-            # Faster calibration to keep the response snappy
-            r.adjust_for_ambient_noise(source, duration=0.5) 
-            print("Jarvis: Listening for command...")
+        with sr.Microphone(device_index=mic_idx, sample_rate=16000) as source:
+            r.adjust_for_ambient_noise(source, duration=0.3)
+            print(f"Listening on Index {mic_idx}...")
+            audio = r.listen(source, timeout=5, phrase_time_limit=10)
             
-            audio = r.listen(source, timeout=5, phrase_time_limit=8)
-            
-            print("Jarvis: Recognizing...")
+        if audio:
+            print("Done listening, recognizing...")
             return r.recognize_google(audio)
             
-    except sr.UnknownValueError:
-        return None # Could not understand audio
     except Exception as e:
-        sys.__stderr__.write(f"Command Listen Error: {e}\n")
+        print(f"Hardware Error: {e}")
         return None
+    return None
