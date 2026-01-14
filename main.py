@@ -1,27 +1,26 @@
-import time
+import os, sys, time
+# Silence ALSA noise
+sys.stderr = open(os.devnull, 'w')
+
 from wake_word import listen_wake_word
-from listen import listen
+from listen import listen_command
 from speech import speak
 from commands import handle_command
 
-print("Jarvis started")
-
-# (Your find_mic_index logic was here too)
-
-while True:
-    print("Waiting for wake word...")
-    if listen_wake_word():
-        time.sleep(0.5) 
-        print("Wake word detected")
-        speak("Yes?")
+if __name__ == "__main__":
+    print("--- Jarvis is Active (Using PulseAudio) ---")
     
-        start = time.time()
-        while time.time() - start < 20: # ACTIVE_TIMEOUT
-            command = listen()
+    while True:
+        print("Waiting for 'Jarvis'...")
+        # Use index -1 to tell PulseAudio to use the System Default Mic
+        if listen_wake_word(device_index=-1):
+            print("Wake word detected!")
+            speak("Yes?")
+            
+            # Give the audio server a moment to switch
+            time.sleep(0.2)
+            
+            command = listen_command()
             if command:
-                state = handle_command(command)
-                if state == "sleep":
-                    break
-                start = time.time()
-            time.sleep(0.1)
-        speak("Sleeping")
+                print(f"User: {command}")
+                handle_command(command)
