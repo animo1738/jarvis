@@ -11,7 +11,7 @@ sys.stderr = open(os.devnull, 'w')
 def main():
     # Use -1 or "default". This tells the libraries: 
     # "Don't look for hardware, just ask PulseAudio for the sound."
-    PULSE_INDEX = -1 
+    PULSE_INDEX = 3
     
     print("--- Jarvis is now using PulseAudio ---")
     
